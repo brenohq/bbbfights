@@ -1,6 +1,9 @@
-import tweepy
 import os
+import json
+import tweepy
 from dotenv import load_dotenv
+
+from methods.list_replies import list_replies
 
 load_dotenv()
 
@@ -32,4 +35,12 @@ print(api.me().name)
 # If the application settings are set for "Read and Write" then
 # this line should tweet out the message to your account's
 # timeline. The "Read and Write" setting is on https://dev.twitter.com/apps
-api.update_status(status='Updating using OAuth authentication via Tweepy!')
+# api.update_status(status='Updating using OAuth authentication via Tweepy!')
+
+# print(json.dumps())
+
+
+# for tweet in api.statuses_lookup([1353867045532807168]):
+#     print(json.dumps(tweet._json))
+
+list_replies(api, 1353867045532807168)
