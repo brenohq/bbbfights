@@ -1,6 +1,7 @@
 import os
 import json
 import tweepy
+import re
 from dotenv import load_dotenv
 
 from methods.list_replies import list_replies
@@ -28,10 +29,6 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-# If the authentication was successful, you should
-# see the name of the account print out
-print(api.me().name)
-
 # If the application settings are set for "Read and Write" then
 # this line should tweet out the message to your account's
 # timeline. The "Read and Write" setting is on https://dev.twitter.com/apps
@@ -43,4 +40,11 @@ print(api.me().name)
 # for tweet in api.statuses_lookup([1353867045532807168]):
 #     print(json.dumps(tweet._json))
 
-list_replies(api, 1353867045532807168)
+# list_replies(api, 1353867045532807168)
+
+poll_regex = re.compile(r'BBB Fight \d{2,}')
+
+for tweet in api.user_timeline("@bbbfights", count=10):
+    if poll_regex.match(tweet.text):
+        most_recent_poll_replies = list_replies(api, tweet.id)
+        print(f"Encontradas {len(most_recent_poll_replies)} replies válidas para a apuração da última enquete.\n")
