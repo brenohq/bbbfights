@@ -4,6 +4,7 @@ import tweepy
 import re
 from dotenv import load_dotenv
 
+from streams.default_stream import TwitterStreamListener
 from methods.list_replies import list_replies
 
 load_dotenv()
@@ -47,4 +48,11 @@ poll_regex = re.compile(r'BBB Fight \d{2,}')
 for tweet in api.user_timeline("@bbbfights", count=10):
     if poll_regex.match(tweet.text):
         most_recent_poll_replies = list_replies(api, tweet.id)
-        print(f"Encontradas {len(most_recent_poll_replies)} replies válidas para a apuração da última enquete.\n")
+        print(
+            f"\nEncontradas {len(most_recent_poll_replies)} replies válidas para a apuração da última enquete.\n")
+
+
+streamListener = TwitterStreamListener(api)
+myStream = tweepy.Stream(auth=api.auth, listener=streamListener)
+
+myStream.filter(track=['BBBFights'], is_async=True)

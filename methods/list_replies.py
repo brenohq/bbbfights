@@ -19,7 +19,7 @@ def list_replies(api, tweet_id):
                 continue
             if reply.in_reply_to_status_id == tweet_id:
                 replies.append(reply)
-                logging.info(f'Reply of tweet: {reply.full_text} with {reply.favorite_count} likes.')
+                logging.info(f'Reply: {reply.full_text} with {reply.favorite_count} likes.')
 
         except tweepy.RateLimitError as e:
             logging.error("Twitter api rate limit reached.")
